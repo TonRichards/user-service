@@ -19,6 +19,8 @@ class AuthController extends Controller
 
         $user = $this->authService->register($data);
 
+        $user->applications()->attach($data['application_id']);
+
         return response()->created([
             'data' => new UserRegisterResource($user),
             'token' => $user->createToken('auth_service_token')->plainTextToken

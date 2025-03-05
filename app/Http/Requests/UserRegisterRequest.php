@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ApplicationEnum;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -19,7 +18,7 @@ class UserRegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'application' => ['required', Rule::in(ApplicationEnum::values())],
+            'application_id' => 'required|integer|exists:applications,id',
         ];
     }
 }

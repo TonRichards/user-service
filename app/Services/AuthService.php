@@ -7,8 +7,13 @@ use App\Data\UserData;
 
 class AuthService
 {
+    public function model(): User
+    {
+        return new User();
+    }
+
     public function register($data = []): User
     {
-        return User::create(UserData::fromArray($data));
+        return $this->model()->create(UserData::fromArray($data));
     }
 }
