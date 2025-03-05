@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Data\UserData;
+use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
@@ -15,5 +16,14 @@ class AuthService
     public function register($data = []): User
     {
         return $this->model()->create(UserData::fromArray($data));
+    }
+
+    public function login($data): ?User
+    {
+        if (!Auth::attempt($data)) {
+            return null;
+        }
+
+        return Auth::user();
     }
 }
