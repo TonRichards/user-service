@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Services\AuthService;
@@ -42,10 +42,5 @@ class AuthController extends Controller
             'user' => new UserRegisterResource($user),
             'access_token' => $user->createToken('auth_service_token')->plainTextToken,
         ]);
-    }
-
-    public function logout(Request $request): JsonResponse
-    {
-        $user = $this->authService->getCurrentUser();
     }
 }

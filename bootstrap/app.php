@@ -1,27 +1,36 @@
 <?php
 
 use App\Exceptions\Handler;
+use Illuminate\Routing\Router;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\AuthenticateUser;
-use Illuminate\Foundation\Configuration\Routing;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 $app = Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
-        health: '/up',
-        then: function () {
-            Route::middleware(['api'])->prefix('api')->group(__DIR__.'/../routes/auth.php');
-        },
-    )
+    ->withRouting(function (Router $router) {
+        require __DIR__.'/../routes/web.php';
+        require __DIR__.'/../routes/api.php';
+        require __DIR__.'/../routes/console.php';
+
+        $router->get('/up', function () {
+            return response()->json(['status' => 'OK']);
+        });
+
+        $router->middleware(['api'])->prefix('api')->group(function () {
+            require __DIR__.'/../routes/apis/dashboard.php';
+        });
+    })
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias(['auth', AuthenticateUser::class]);
+        $middleware->alias([
+            'auth' => AuthenticateUser::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->replaceHandler(Handler::class);
-    })->create();
+        // $exceptions->render(function ($request, $e) {
+        //     return app(Handler::class)->render($request, $e);
+        // });
+    })
+    ->create();
 
 return $app;
