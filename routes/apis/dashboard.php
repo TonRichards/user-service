@@ -16,4 +16,5 @@ Route::controller(RoleController::class)->prefix('roles')->group(function () {
 
 Route::controller(ApplicationController::class)->prefix('applications')->group(function () {
     Route::post('/', 'store');
+    Route::get('/', 'index');
 });

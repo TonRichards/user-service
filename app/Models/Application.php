@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Application extends Model
 {
@@ -13,4 +14,9 @@ class Application extends Model
         'display_name',
         'description'
     ];
+
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
+    }
 }
