@@ -25,6 +25,6 @@ class ApplicationService
 
     public function getApplication($id): Application
     {
-        return $this->model()->where('id', $id)->first();
+        return $this->model()->where('id', $id)->with('roles')->first();
     }
 }
