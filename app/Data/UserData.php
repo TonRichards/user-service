@@ -2,7 +2,6 @@
 
 namespace App\Data;
 
-use App\Models\User;
 use Spatie\LaravelData\Data;
 
 class UserData extends Data
