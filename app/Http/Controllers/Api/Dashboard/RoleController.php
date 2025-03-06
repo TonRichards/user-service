@@ -7,7 +7,9 @@ use App\Services\RoleService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\RoleResource;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoleCollection;
 use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
 
 class RoleController extends Controller
 {
@@ -18,5 +20,33 @@ class RoleController extends Controller
         $role = $this->roleService->store($request->validated());
 
         return response()->created(new RoleResource($role));
+    }
+
+    public function index(): JsonResponse
+    {
+        $roles = $this->roleService->getRoles();
+
+        return response()->success(new RoleCollection($roles));
+    }
+
+    public function show($id): JsonResponse
+    {
+        $role = $this->roleService->getById($id);
+
+        return response()->success(new RoleResource($role));
+    }
+
+    public function update(RoleUpdateRequest $request, $id): JsonResponse
+    {
+        $role = $this->roleService->update($request->validated(), $id);
+
+        return response()->success(new RoleResource($role));
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $this->roleService->delete($id);
+
+        return response()->success();
     }
 }
