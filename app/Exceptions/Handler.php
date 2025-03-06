@@ -32,15 +32,15 @@ class Handler extends ExceptionHandler
 
     private function handleApiException(Throwable $e, Request $request): JsonResponse
     {
-        if ($e instanceof NotFoundHttpException) {
-            return response()->json([
-                'message' => 'Record not found',
-            ], 404);
-        }
-
         if ($e instanceof ModelNotFoundException) {
             return response()->json([
                 'message' => class_basename($e->getModel()) . ' Not found',
+            ], 404);
+        }
+
+        if ($e instanceof NotFoundHttpException) {
+            return response()->json([
+                'message' => 'Record not found',
             ], 404);
         }
 

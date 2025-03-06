@@ -27,10 +27,13 @@ $app = Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        // $exceptions->render(function ($request, $e) {
-        //     return app(Handler::class)->render($request, $e);
-        // });
+        //
     })
     ->create();
+
+    $app->singleton(
+        Illuminate\Contracts\Debug\ExceptionHandler::class,
+        App\Exceptions\Handler::class
+    );
 
 return $app;

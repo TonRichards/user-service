@@ -23,8 +23,28 @@ class ApplicationService
         return $this->model()->get();
     }
 
-    public function getApplication($id): Application
+    public function getById(string $id): Application
     {
-        return $this->model()->where('id', $id)->with('roles')->first();
+        return $this->model()->where('id', $id)->firstOrFail();
+    }
+
+    public function update(array $data, string $id): Application
+    {
+        $application = $this->getById($id);
+
+        $application->update(ApplicationData::fromArray($data));
+
+        $application->fresh();
+
+        return $application;
+    }
+
+    public function delete(string $id): void
+    {
+        $application = $this->getById($id);
+
+        $application->roles()->delete();
+
+        $application->delete();
     }
 }
