@@ -27,4 +27,11 @@ class ApplicationController extends Controller
 
         return response()->success(new ApplicationCollection($applications));
     }
+
+    public function show(Request $request, $id): JsonResponse
+    {
+        $application = $this->applicationService->getApplication($id);
+
+        return response()->success(new ApplicationResource($application));
+    }
 }

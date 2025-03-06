@@ -13,7 +13,7 @@ class ApplicationService
         return new Application();
     }
 
-    public function store($data = []): Application
+    public function store(array $data = []): Application
     {
         return $this->model()->create(ApplicationData::fromArray($data));
     }
@@ -21,5 +21,10 @@ class ApplicationService
     public function getApplications(): Collection
     {
         return $this->model()->get();
+    }
+
+    public function getApplication($id): Application
+    {
+        return $this->model()->where('id', $id)->first();
     }
 }
