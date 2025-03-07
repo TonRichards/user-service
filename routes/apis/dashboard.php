@@ -29,4 +29,5 @@ Route::controller(ApplicationController::class)->prefix('applications')->group(f
 
 Route::controller(PermissionController::class)->prefix('permissions')->group(function () {
     Route::post('/', 'store');
+    Route::get('/', 'index');
 });

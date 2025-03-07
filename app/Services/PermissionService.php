@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Permission;
 use App\Data\PermissionData;
+use Illuminate\Database\Eloquent\Collection;
 
 class PermissionService
 {
@@ -21,5 +22,10 @@ class PermissionService
         }
 
         return $permission;
+    }
+
+    public function getPermissions(): Collection
+    {
+        return $this->model()->get();
     }
 }

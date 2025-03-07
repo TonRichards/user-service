@@ -12,6 +12,7 @@ class RoleCollection extends ResourceCollection
     {
         return $this->collection->map(function ($role) {
             return [
+                'id' => $role->id,
                 'name' => $role->name,
                 'display_name' => $role->display_name,
             ];

@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\PermissionService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionResource;
+use App\Http\Resources\PermissionCollection;
 use App\Http\Requests\PermissionStoreRequest;
 
 class PermissionController extends Controller
@@ -18,5 +19,12 @@ class PermissionController extends Controller
         $permission = $this->permissionService->store($request->validated());
 
         return response()->success(new PermissionResource($permission));
+    }
+
+    public function index(): JsonResponse
+    {
+        $permissions = $this->permissionService->getPermissions();
+
+        return response()->success(new PermissionCollection($permissions));
     }
 }
