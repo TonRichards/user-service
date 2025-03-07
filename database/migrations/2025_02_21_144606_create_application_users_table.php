@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('application_accesses', function (Blueprint $table) {
+        Schema::create('application_users', function (Blueprint $table) {
             $table->id();
             $table->char('user_id', 26);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('application_id')->constrained()->onDelete('cascade');
+            $table->char('application_id', 26);
+            $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('application_accesses');
+        Schema::dropIfExists('application_users');
     }
 };

@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('applications', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name')->unique();
             $table->string('display_name')->unique();
-            $table->text('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

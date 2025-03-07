@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('display_names')->nullable();
+            $table->string('display_name')->nullable();
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

@@ -4,6 +4,7 @@ use App\Exceptions\Handler;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\AuthenticateUser;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -31,9 +32,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
     })
     ->create();
 
-    $app->singleton(
-        Illuminate\Contracts\Debug\ExceptionHandler::class,
-        App\Exceptions\Handler::class
-    );
+    $app->singleton(ExceptionHandler::class, Handler::class);
 
 return $app;
