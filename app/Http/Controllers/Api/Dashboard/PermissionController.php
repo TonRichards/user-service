@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\PermissionCollection;
 use App\Http\Requests\PermissionStoreRequest;
+use App\Http\Requests\PermissionUpdateRequest;
 
 class PermissionController extends Controller
 {
@@ -33,5 +34,19 @@ class PermissionController extends Controller
         $permission = $this->permissionService->getById($id);
 
         return response()->success(new PermissionResource($permission));
+    }
+
+    public function update(PermissionUpdateRequest $request, string $id): JsonResponse
+    {
+        $permission = $this->permissionService->update($request->validated(), $id);
+
+        return response()->success(new PermissionResource($permission));
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $this->permissionService->delete($id);
+
+        return response()->success();
     }
 }

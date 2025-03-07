@@ -33,4 +33,24 @@ class PermissionService
     {
         return $this->model()->get();
     }
+
+    public function update(array $data = [], string $id): Permission
+    {
+        $permission = $this->getById($id);
+
+        $permission->update(PermissionData::fromArray($data));
+
+        $permission->fresh();
+
+        return $permission;
+    }
+
+    public function delete(string $id): void
+    {
+        $permission = $this->getById($id);
+
+        $permission->roles()->detach();
+
+        $permission->delete();
+    }
 }
