@@ -13,6 +13,11 @@ class PermissionService
         return new Permission();
     }
 
+    public function getById(string $id): Permission
+    {
+        return $this->model()->findOrFail($id);
+    }
+
     public function store(array $data = []): Permission
     {
         $permission = $this->model()->create(PermissionData::fromArray($data));

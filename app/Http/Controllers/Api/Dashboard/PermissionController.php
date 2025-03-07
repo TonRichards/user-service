@@ -27,4 +27,11 @@ class PermissionController extends Controller
 
         return response()->success(new PermissionCollection($permissions));
     }
+
+    public function show($id): JsonResponse
+    {
+        $permission = $this->permissionService->getById($id);
+
+        return response()->success(new PermissionResource($permission));
+    }
 }
