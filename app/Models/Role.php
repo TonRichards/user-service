@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
@@ -14,12 +15,17 @@ class Role extends Model
 
     protected $fillable = [
         'name',
-        'description',
+        'display_name',
         'application_id',
     ];
 
     public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class);
+    }
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'permission_roles');
     }
 }

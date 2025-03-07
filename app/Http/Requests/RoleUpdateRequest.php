@@ -15,14 +15,14 @@ class RoleUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'application_id' => 'required|integer|exists:applications,id',
+            'application_id' => 'required|string|exists:applications,id',
             'name' => [
                 'required',
                 'string',
                 'max:255',
                 Rule::unique('roles', 'name')->where('application_id', $this->application_id)
             ],
-            'description' => 'required|string|max:255'
+            'display_name' => 'required|string|max:255'
         ];
     }
 }

@@ -4,20 +4,18 @@ namespace App\Data;
 
 use Spatie\LaravelData\Data;
 
-class RoleData extends Data
+class PermissionData Extends Data
 {
     public function __construct(
         public string $name,
         public string $display_name,
-        public integer $application_id,
     ) {}
 
-    public static function fromArray(array $data): array
+    public static function fromArray(array $data = []): array
     {
         return [
             'name' => $data['name'],
-            'display_name' => $data['display_name'],
-            'application_id' => $data['application_id'],
+            'display_name' => $data['display_name'] ?? null,
         ];
     }
 }

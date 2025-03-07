@@ -13,7 +13,7 @@ class RoleCollection extends ResourceCollection
         return $this->collection->map(function ($role) {
             return [
                 'name' => $role->name,
-                'description' => $role->description,
+                'display_name' => $role->display_name,
             ];
         });
     }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Dashboard\AuthController;
 use App\Http\Controllers\Api\Dashboard\RoleController;
+use App\Http\Controllers\Api\Dashboard\PermissionController;
 use App\Http\Controllers\Api\Dashboard\ApplicationController;
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
@@ -24,4 +25,8 @@ Route::controller(ApplicationController::class)->prefix('applications')->group(f
     Route::get('/{id}', 'show');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
+});
+
+Route::controller(PermissionController::class)->prefix('permissions')->group(function () {
+    Route::post('/', 'store');
 });

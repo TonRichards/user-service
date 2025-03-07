@@ -17,7 +17,7 @@ class UserRegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'application_id' => 'required|integer|exists:applications,id',
+            'application_id' => 'required|string|exists:applications,id',
         ];
     }
 }
