@@ -16,7 +16,6 @@ class ApplicationUpdateRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'display_name' => 'nullable|string',
-            'description' => 'nullable|string',
         ];
     }
 }

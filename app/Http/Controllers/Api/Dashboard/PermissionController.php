@@ -26,7 +26,11 @@ class PermissionController extends Controller
     {
         $permissions = $this->permissionService->getPermissions();
 
-        return response()->success(new PermissionCollection($permissions));
+        return response()->paginated(
+            new PermissionCollection($permissions),
+            $permissions,
+            'Permission retrived successfully.',
+        );
     }
 
     public function show($id): JsonResponse

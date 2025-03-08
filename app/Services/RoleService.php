@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Role;
 use App\Data\RoleData;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RoleService
 {
@@ -23,11 +23,11 @@ class RoleService
         return $this->model()->create(RoleData::fromArray($data));
     }
 
-    public function getRoles(): ?Collection
+    public function getRoles(): LengthAwarePaginator
     {
         return $this->model()
             ->where('application_id', request()->get('application_id'))
-            ->get();
+            ->paginate(request()->get('per_page', 10));
     }
 
     public function update(array $data = [], string $id): Role

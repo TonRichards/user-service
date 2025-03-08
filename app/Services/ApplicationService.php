@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Application;
 use App\Data\ApplicationData;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApplicationService
 {
@@ -18,9 +18,9 @@ class ApplicationService
         return $this->model()->create(ApplicationData::fromArray($data));
     }
 
-    public function getApplications(): Collection
+    public function getApplications(): LengthAwarePaginator
     {
-        return $this->model()->get();
+        return $this->model()->paginate(request()->query('per_page', 10));
     }
 
     public function getById(string $id): Application

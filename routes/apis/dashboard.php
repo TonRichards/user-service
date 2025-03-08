@@ -11,7 +11,7 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'login');
 });
 
-Route::controller(RoleController::class)->prefix('roles')->group(function () {
+Route::controller(ApplicationController::class)->prefix('applications')->group(function () {
     Route::post('/', 'store');
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
@@ -19,7 +19,7 @@ Route::controller(RoleController::class)->prefix('roles')->group(function () {
     Route::delete('/{id}', 'destroy');
 });
 
-Route::controller(ApplicationController::class)->prefix('applications')->group(function () {
+Route::controller(RoleController::class)->prefix('roles')->group(function () {
     Route::post('/', 'store');
     Route::get('/', 'index');
     Route::get('/{id}', 'show');

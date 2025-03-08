@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ResponseServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,22 @@ class ResponseServiceProvider extends ServiceProvider
                 'success' => false,
                 'message' => 'Unauthorized to this resources',
             ], 401);
+        });
+
+        Response::macro('paginated', function ($data = [], LengthAwarePaginator $paginator, string $message = 'Success') {
+            return Response::json([
+                'success' => true,
+                'message' => $message,
+                'data' => $data,
+                'pagination' => [
+                    'current_page' => $paginator->currentPage(),
+                    'per_page' => $paginator->perPage(),
+                    'total' => $paginator->total(),
+                    'last_page' => $paginator->lastPage(),
+                    'next_page_url' => $paginator->nextPageUrl(),
+                    'prev_page_url' => $paginator->previousPageUrl(),
+                ],
+            ], 200);
         });
     }
 }

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Permission;
 use App\Data\PermissionData;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PermissionService
 {
@@ -29,9 +29,9 @@ class PermissionService
         return $permission;
     }
 
-    public function getPermissions(): Collection
+    public function getPermissions(): LengthAwarePaginator
     {
-        return $this->model()->get();
+        return $this->model()->paginate(request()->get('per_page', 10));
     }
 
     public function update(array $data = [], string $id): Permission
