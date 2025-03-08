@@ -22,9 +22,9 @@ class RoleController extends Controller
         return response()->created(new RoleResource($role));
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $roles = $this->roleService->getRoles();
+        $roles = $this->roleService->getRoles($request);
 
         return response()->paginated(
             new RoleCollection($roles),

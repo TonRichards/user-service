@@ -24,7 +24,7 @@ class ApplicationController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $applications = $this->applicationService->getApplications();
+        $applications = $this->applicationService->getApplications($request);
 
         return response()->paginated(
             new ApplicationCollection($applications),

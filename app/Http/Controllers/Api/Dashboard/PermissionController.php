@@ -22,9 +22,9 @@ class PermissionController extends Controller
         return response()->success(new PermissionResource($permission));
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $permissions = $this->permissionService->getPermissions();
+        $permissions = $this->permissionService->getPermissions($request);
 
         return response()->paginated(
             new PermissionCollection($permissions),

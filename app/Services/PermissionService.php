@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Permission;
 use App\Data\PermissionData;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PermissionService
@@ -29,9 +30,17 @@ class PermissionService
         return $permission;
     }
 
-    public function getPermissions(): LengthAwarePaginator
+    public function getPermissions(Request $request): LengthAwarePaginator
     {
-        return $this->model()->paginate(request()->get('per_page', 10));
+        $sortBy = $request->get('sort', 'created_at');
+        $orderBy = $request->get('order');
+        $search = $request->get('q', '*');
+        $perPage = $request->get('per_page', 10);
+
+        return $this->model()
+            ->search($search)
+            ->orderBy($sortBy, $orderBy)
+            ->paginate($perPage);
     }
 
     public function update(array $data = [], string $id): Permission

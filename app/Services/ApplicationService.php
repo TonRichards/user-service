@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Application;
+use Illuminate\Http\Request;
 use App\Data\ApplicationData;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -18,9 +19,17 @@ class ApplicationService
         return $this->model()->create(ApplicationData::fromArray($data));
     }
 
-    public function getApplications(): LengthAwarePaginator
+    public function getApplications(Request $request): LengthAwarePaginator
     {
-        return $this->model()->paginate(request()->query('per_page', 10));
+        $search = $request->get('q', '*');
+        $sortBy = $request->get('sort', 'created_at');
+        $orderBy = $request->get('order', 'desc');
+        $perPage = $request->get('per_page', 10);
+
+        return $this->model()
+            ->search($search)
+            ->orderBy($sortBy, $orderBy)
+            ->paginate($perPage);
     }
 
     public function getById(string $id): Application
