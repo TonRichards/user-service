@@ -26,9 +26,9 @@ class RoleService
 
     public function getRoles(Request $request): LengthAwarePaginator
     {
-        $search = $request->get('q');
+        $search = $request->get('q', '*');
         $orderBy = $request->get('order');
-        $perPage = $request->get('per_page', '*');
+        $perPage = $request->get('per_page', 10);
         $sortBy = $request->get('sort', 'created_at');
         $applicationId = $request->get('application_id');
 
