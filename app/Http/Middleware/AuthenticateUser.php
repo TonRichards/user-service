@@ -12,13 +12,13 @@ class AuthenticateUser
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->bearerToken()) {
-            return response()->unauthorized();
+            return response()->unauthenticated();
         }
 
-        $user = Auth::guard('sanctum')->user();
+        $user = Auth::guard('api')->user();
 
         if (!$user) {
-            return response()->unauthorized();
+            return response()->unauthenticated();
         }
 
         return $next($request);

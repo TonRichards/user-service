@@ -26,11 +26,7 @@ class ApplicationController extends Controller
     {
         $applications = $this->applicationService->getApplications($request);
 
-        return response()->paginated(
-            new ApplicationCollection($applications),
-            $applications,
-            'Applications retrieved successfully.',
-        );
+        return response()->paginated(new ApplicationCollection($applications), $applications);
     }
 
     public function show(Request $request, $id): JsonResponse

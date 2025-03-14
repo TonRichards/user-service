@@ -24,7 +24,6 @@ class AuthController extends Controller
 
         return response()->created([
             'user' => new UserRegisterResource($user),
-            'access_token' => $user->createToken('auth_service_token')->plainTextToken
         ]);
     }
 
@@ -35,12 +34,16 @@ class AuthController extends Controller
         $user = $this->authService->login($data);
 
         if (!$user) {
-            return response()->unauthorized();
+            return response()->json([
+                'success' => false,
+                'status' => 401,
+                'message' => 'Incorrect username or password',
+            ]);
         }
 
         return response()->success([    
             'user' => new UserRegisterResource($user),
-            'access_token' => $user->createToken('auth_service_token')->plainTextToken,
+            'access_token' => $user->createToken('auth_service_token')->accessToken,
         ]);
     }
 }

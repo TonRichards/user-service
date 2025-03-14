@@ -35,17 +35,24 @@ class ResponseServiceProvider extends ServiceProvider
             ], 201);
         });
 
+        Response::macro('unauthenticated', function () {
+            return Response::json([
+                'success' => false,
+                'message' => 'Unauthenticated',
+            ], 401);
+        });
+
         Response::macro('unauthorized', function () {
             return Response::json([
                 'success' => false,
                 'message' => 'Unauthorized to this resources',
-            ], 401);
+            ], 403);
         });
 
-        Response::macro('paginated', function ($data = [], LengthAwarePaginator $paginator, string $message = 'Success') {
+        Response::macro('paginated', function ($data = [], LengthAwarePaginator $paginator) {
             return Response::json([
                 'success' => true,
-                'message' => $message,
+                'message' => 'Data retrived successfully',
                 'data' => $data,
                 'pagination' => [
                     'current_page' => $paginator->currentPage(),
