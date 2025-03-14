@@ -14,6 +14,11 @@ class UserService
         return new User();
     }
 
+    public function getById(string $id): User
+    {
+        return $this->model()->findOrFail($id);
+    }
+
     public function store(array $data = []): User
     {
         return $this->model()->create(UserData::fromArray($data));

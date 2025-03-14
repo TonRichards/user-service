@@ -31,4 +31,11 @@ class UserController extends Controller
 
         return response()->paginated(new UserCollection($users), $users);
     }
+
+    public function show(Request $request, $id): JsonResponse
+    {
+        $user = $this->userService->getById($id);
+
+        return response()->success(new UserResource($user));
+    }
 }

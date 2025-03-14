@@ -33,4 +33,5 @@ Route::controller(PermissionController::class)->prefix('permissions')->group(fun
 Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::post('/', 'store');
     Route::get('/', 'index');
+    Route::get('/{id}', 'show');
 });
