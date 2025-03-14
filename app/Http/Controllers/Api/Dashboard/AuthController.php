@@ -12,13 +12,16 @@ use App\Http\Resources\UserRegisterResource;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService) {}
+    public function __construct(
+        protected AuthService $authService,
+        protected userService $userService,
+    ) {}
 
     public function register(UserRegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
 
-        $user = $this->authService->register($data);
+        $user = $this->userService->store($data);
 
         $user->applications()->attach($data['application_id']);
 
