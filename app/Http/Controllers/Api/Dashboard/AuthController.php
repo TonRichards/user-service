@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Services\AuthService;
-use App\Services\userService;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserLoginRequest;
@@ -15,7 +15,7 @@ class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService,
-        protected userService $userService,
+        protected UserService $userService,
     ) {}
 
     public function register(UserRegisterRequest $request): JsonResponse

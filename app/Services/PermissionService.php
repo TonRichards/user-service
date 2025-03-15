@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Permission;
 use App\Data\PermissionData;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PermissionService
 {
@@ -43,7 +43,7 @@ class PermissionService
             ->paginate($perPage);
     }
 
-    public function update(array $data = [], string $id): Permission
+    public function update(string $id, array $data = []): Permission
     {
         $permission = $this->getById($id);
 

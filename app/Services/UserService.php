@@ -7,7 +7,7 @@ use App\Data\UserData;
 use Illuminate\Http\Request;
 use App\Actions\UpdateUserAction;
 use App\Actions\UpsertUserAction;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserService
 {

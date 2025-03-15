@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Role;
 use App\Data\RoleData;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RoleService
 {
@@ -43,7 +43,7 @@ class RoleService
         return $query->paginate($perPage);
     }
 
-    public function update(array $data = [], string $id): Role
+    public function update(string $id, array $data = []): Role
     {
         $role = $this->getById($id);
 

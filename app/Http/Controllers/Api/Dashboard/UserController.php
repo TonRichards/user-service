@@ -31,7 +31,7 @@ class UserController extends Controller
     {
         $users = $this->userService->getUsers($request);
 
-        return response()->paginated(new UserCollection($users), $users);
+        return response()->withPaginated($users, new UserCollection($users));
     }
 
     public function show(Request $request, $id): JsonResponse
@@ -58,7 +58,7 @@ class UserController extends Controller
 
     public function destroy(UserDeleteRequest $request, $id): JsonResponse
     {
-        $user = $this->userService->destroy($id, $request->validated()['application_id']);
+        $this->userService->destroy($id, $request->validated()['application_id']);
 
         return response()->success();
     }

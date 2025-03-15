@@ -9,7 +9,7 @@ class RoleData extends Data
     public function __construct(
         public string $name,
         public string $display_name,
-        public integer $application_id,
+        public string $application_id,
     ) {}
 
     public static function fromArray(array $data): array

@@ -26,7 +26,7 @@ class RoleController extends Controller
     {
         $roles = $this->roleService->getRoles($request);
 
-        return response()->paginated(new RoleCollection($roles), $roles);
+        return response()->withPaginated($roles, new RoleCollection($roles));
     }
 
     public function show($id): JsonResponse
@@ -38,7 +38,7 @@ class RoleController extends Controller
 
     public function update(RoleUpdateRequest $request, $id): JsonResponse
     {
-        $role = $this->roleService->update($request->validated(), $id);
+        $role = $this->roleService->update($id, $request->validated());
 
         return response()->success(new RoleResource($role));
     }

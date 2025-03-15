@@ -5,6 +5,11 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property string $id
+ * @property string $name
+ * @property string $display_name
+ */
 class RoleResource extends JsonResource
 {
     public function toArray(Request $request): array
@@ -13,7 +18,7 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'display_name' => $this->display_name,
-            'application_name' => $this->application->display_name
+            'application_name' => $this->application->display_name // @phpstan-ignore-line
         ];
     }
 }

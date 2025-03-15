@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ResponseServiceProvider extends ServiceProvider
 {
@@ -49,7 +49,7 @@ class ResponseServiceProvider extends ServiceProvider
             ], 403);
         });
 
-        Response::macro('paginated', function ($data = [], LengthAwarePaginator $paginator) {
+        Response::macro('withPaginated', function (LengthAwarePaginator $paginator, mixed $data) {
             return Response::json([
                 'success' => true,
                 'message' => 'Data retrived successfully',

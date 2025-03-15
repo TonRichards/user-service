@@ -26,7 +26,7 @@ class PermissionController extends Controller
     {
         $permissions = $this->permissionService->getPermissions($request);
 
-        return response()->paginated(new PermissionCollection($permissions), $permissions);
+        return response()->withPaginated($permissions, new PermissionCollection($permissions));
     }
 
     public function show($id): JsonResponse
@@ -38,7 +38,7 @@ class PermissionController extends Controller
 
     public function update(PermissionUpdateRequest $request, string $id): JsonResponse
     {
-        $permission = $this->permissionService->update($request->validated(), $id);
+        $permission = $this->permissionService->update($id, $request->validated());
 
         return response()->success(new PermissionResource($permission));
     }

@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Data\ApplicationData;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ApplicationService
 {
