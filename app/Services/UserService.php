@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Data\UserData;
 use Illuminate\Http\Request;
+use App\Actions\UpdateUserAction;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserService
@@ -35,5 +36,25 @@ class UserService
             ->search($search)
             ->orderBy($sortBy, $orderBy)
             ->paginate($perPage);
+    }
+
+    public function update(string $id, array $data = []): User
+    {
+        $user = $this->getById($id);
+
+        UpdateUserAction::execute($user, $data);
+
+        return $user;
+    }
+
+    public function destroy(string $id, string $applicationId): void
+    {
+        $user = $this->getById($id);
+
+        $user->applications()->detach($applicationId);
+
+        if ($user->applications()->count() < 1) {
+            $user->delete();
+        }
     }
 }
