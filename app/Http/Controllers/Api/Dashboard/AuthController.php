@@ -27,7 +27,7 @@ class AuthController extends Controller
         $user->applications()->attach($data['application_id']);
 
         return response()->created([
-            'user' => new UserRegisterResource($user),
+            'user' => new UserRegisterResource($user->fresh()),
         ]);
     }
 

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Data\UserData;
 use Illuminate\Http\Request;
 use App\Actions\UpdateUserAction;
+use App\Actions\UpsertUserAction;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserService
@@ -22,7 +23,7 @@ class UserService
 
     public function store(array $data = []): User
     {
-        return $this->model()->create(UserData::fromArray($data));
+        return UpsertUserAction::execute($data);
     }
 
     public function getUsers(Request $request): LengthAwarePaginator
