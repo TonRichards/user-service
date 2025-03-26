@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
+        Schema::create('organizations', function (Blueprint $table) {
+            $table->ulid('id')->primary();
             $table->string('name')->unique();
-            $table->string('label_en')->nullable();
-            $table->string('label_th')->nullable();
-            $table->string('description_en')->nullable();
-            $table->string('description_th')->nullable();
+            $table->string('email')->unique();
             $table->timestamps();
 
             $table->softDeletes();
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('organizations');
     }
 };
