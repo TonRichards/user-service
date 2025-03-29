@@ -30,6 +30,10 @@ $app = Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth' => AuthenticateUser::class,
         ]);
+
+        $middleware->append([
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

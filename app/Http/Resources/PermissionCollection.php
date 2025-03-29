@@ -14,7 +14,10 @@ class PermissionCollection extends ResourceCollection
             return [
                 'id' => $permission->id,
                 'name' => $permission->name,
-                'display_name' => $permission->display_name,
+                'label_en' => $permission->label_en,
+                'label_th' => $permission->label_th,
+                'description_en' => $permission->description_en,
+                'description_th' => $permission->description_th,
                 'roles' => RoleResource::collection($permission->roles),
             ];
         });

@@ -29,7 +29,11 @@ class Permission extends Model
     public function toSearchableArray()
     {
         return [
-            'display_name' => $this->display_name,
+            'name' => $this->name,
+            'label_en' => $this->label_en,
+            'label_th' => $this->label_th,
+            'description_en' => $this->description_en,
+            'description_th' => $this->description_th,
         ];
     }
 }
