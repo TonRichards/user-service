@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Role;
 use App\Data\RoleData;
 use Illuminate\Http\Request;
+use App\Actions\SyncRolePermissionAction;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RoleService
@@ -21,7 +22,11 @@ class RoleService
 
     public function store(array $data = []): Role
     {
-        return $this->model()->create(RoleData::fromArray($data));
+        $role = $this->model()->create(RoleData::fromArray($data));
+
+        SyncRolePermissionAction::execute($role, $data);
+
+        return $role;
     }
 
     public function getRoles(Request $request): LengthAwarePaginator
@@ -30,15 +35,10 @@ class RoleService
         $orderBy = $request->get('order');
         $perPage = $request->get('per_page', 10);
         $sortBy = $request->get('sort', 'created_at');
-        $applicationId = $request->get('application_id');
 
         $query = $this->model()
             ->search($search)
             ->orderBy($sortBy, $orderBy);
-
-        if ($applicationId) {
-            $query = $query->where('application_id', $applicationId);
-        }
 
         return $query->paginate($perPage);
     }

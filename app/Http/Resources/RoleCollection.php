@@ -15,7 +15,13 @@ class RoleCollection extends ResourceCollection
                 'id' => $role->id,
                 'name' => $role->name,
                 'display_name' => $role->display_name,
+                'permissions' => $this->permissions($role->permissions),
             ];
         });
+    }
+
+    private function permissions($permissions): array
+    {
+        return $permissions->pluck('label_en')->toArray();
     }
 }

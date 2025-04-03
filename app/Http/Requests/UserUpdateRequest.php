@@ -22,7 +22,6 @@ class UserUpdateRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($this->route('user')),
             ],
             'password' => 'nullable|string|min:6|confirmed',
-            'application_id' => 'required|string|exists:applications,id',
             'roles' => 'array',
             'roles.*' => 'exists:roles,id'
         ];

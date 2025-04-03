@@ -48,14 +48,11 @@ class UserService
         return $user;
     }
 
-    public function destroy(string $id, string $applicationId): void
+    public function destroy(string $id): void
     {
         $user = $this->getById($id);
 
-        $user->applications()->detach($applicationId);
+        $user->delete();
 
-        if ($user->applications()->count() < 1) {
-            $user->delete();
-        }
     }
 }

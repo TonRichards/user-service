@@ -10,7 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Http\Requests\UserDeleteRequest;
 
 class UserController extends Controller
 {
@@ -21,8 +20,6 @@ class UserController extends Controller
         $data = $request->validated();
 
         $user = $this->userService->store($data);
-
-        $user->applications()->attach($data['application_id']);
 
         return response()->created(new UserResource($user));
     }
@@ -47,8 +44,6 @@ class UserController extends Controller
 
         $user = $this->userService->update($id, $data);
 
-        $user->applications()->sync($data['application_id']);
-
         if (isset($data['roles'])) {
             $user->roles()->sync($data['roles']);
         }
@@ -56,9 +51,9 @@ class UserController extends Controller
         return response()->success(new UserResource($user->fresh()));
     }
 
-    public function destroy(UserDeleteRequest $request, $id): JsonResponse
+    public function destroy(Request $request, $id): JsonResponse
     {
-        $this->userService->destroy($id, $request->validated()['application_id']);
+        $this->userService->destroy($id);
 
         return response()->success();
     }

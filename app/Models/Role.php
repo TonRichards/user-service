@@ -17,13 +17,7 @@ class Role extends Model
     protected $fillable = [
         'name',
         'display_name',
-        'application_id',
     ];
-
-    public function application(): BelongsTo
-    {
-        return $this->belongsTo(Application::class);
-    }
 
     public function permissions(): BelongsToMany
     {
@@ -34,7 +28,6 @@ class Role extends Model
     {
         return [
             'display_name' => $this->display_name,
-            'application_id' => $this->application_id,
         ];
     }
 }

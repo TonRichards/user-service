@@ -33,11 +33,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function applications(): BelongsToMany
-    {
-        return $this->belongsToMany(Application::class, 'application_users');
-    }
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_users');

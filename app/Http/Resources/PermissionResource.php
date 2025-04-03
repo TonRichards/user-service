@@ -17,7 +17,10 @@ class PermissionResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'display_name' => $this->display_name,
+            'label_en' => $this->label_en,
+            'label_th' => $this->label_th,
+            'description_en' => $this->description_en,
+            'description_th' => $this->description_th,
             'roles' => RoleResource::collection($this->roles), // @phpstan-ignore-line
         ];
     }

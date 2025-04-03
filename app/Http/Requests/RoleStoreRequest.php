@@ -15,14 +15,14 @@ class RoleStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'application_id' => 'required|string|exists:applications,id',
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('roles', 'name')->where('application_id', $this->application_id)
+                Rule::unique('roles', 'name'),
             ],
-            'display_name' => 'required|string|max:255'
+            'display_name' => 'required|string|max:255',
+            'permission_names' => 'array',
         ];
     }
 }

@@ -18,7 +18,6 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'display_name' => $this->display_name,
-            'application_name' => $this->application->display_name // @phpstan-ignore-line
         ];
     }
 }
