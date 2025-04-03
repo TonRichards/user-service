@@ -49,6 +49,8 @@ class RoleService
 
         $role->update(RoleData::fromArray($data));
 
+        SyncRolePermissionAction::execute($role, $data);
+
         $role->fresh();
 
         return $role;

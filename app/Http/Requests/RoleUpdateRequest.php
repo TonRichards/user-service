@@ -19,9 +19,10 @@ class RoleUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('roles', 'name'),
+                Rule::unique('roles', 'name')->ignore($this->route('id')),
             ],
-            'display_name' => 'required|string|max:255'
+            'display_name' => 'required|string|max:255',
+            'permission_names' => 'array',
         ];
     }
 }
