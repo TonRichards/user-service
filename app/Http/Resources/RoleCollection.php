@@ -22,6 +22,11 @@ class RoleCollection extends ResourceCollection
 
     private function permissions($permissions): array
     {
-        return $permissions->pluck('name')->toArray();
+        return $permissions->map(function ($permission) {
+            return [
+                'name' => $permission->name,
+                'label_en' => $permission->label_en,
+            ];
+        })->toArray();
     }
 }

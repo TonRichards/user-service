@@ -8,14 +8,17 @@ class PermissionData Extends Data
 {
     public function __construct(
         public string $name,
-        public string $display_name,
+        public string $label_en,
     ) {}
 
     public static function fromArray(array $data = []): array
     {
         return [
             'name' => $data['name'],
-            'display_name' => $data['display_name'] ?? null,
+            'label_en' => $data['label_en'] ?? null,
+            'label_th' => $data['label_th'] ?? null,
+            'description_en' => $data['description_en'] ?? null,
+            'description_th' => $data['description_th'] ?? null,
         ];
     }
 }

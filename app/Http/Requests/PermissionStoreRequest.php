@@ -15,8 +15,10 @@ class PermissionStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string||unique:permissions,name',
-            'display_name' => 'nullable|string',
-            'role_id' => 'nullable|integer|exists:roles,id',
+            'label_en' => 'nullable|string',
+            'label_th' => 'nullable|string',
+            'description_en' => 'nullable|string',
+            'description_th' => 'nullable|string',
         ];
     }
 }

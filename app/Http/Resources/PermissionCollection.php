@@ -18,7 +18,6 @@ class PermissionCollection extends ResourceCollection
                 'label_th' => $permission->label_th,
                 'description_en' => $permission->description_en,
                 'description_th' => $permission->description_th,
-                'roles' => RoleResource::collection($permission->roles),
             ];
         });
     }

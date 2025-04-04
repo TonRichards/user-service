@@ -23,10 +23,6 @@ class PermissionService
     {
         $permission = $this->model()->create(PermissionData::fromArray($data));
 
-        if (isset($data['role_id'])) {
-            $permission->roles()->sync($data['role_id']);
-        }
-
         return $permission;
     }
 
