@@ -7,6 +7,8 @@ use App\Services\AuthService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserRegisterResource;
@@ -43,9 +45,16 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->success([    
+        return response()->success([
             'user' => new UserRegisterResource($user),
             'access_token' => $user->createToken('auth_service_token')->accessToken,
         ]);
+    }
+
+    public function getCurrentUser(Request $request): JsonResponse
+    {
+        $user = Auth::guard('api')->user();
+
+        return response()->success(new UserResource($user));
     }
 }

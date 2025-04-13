@@ -11,13 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('organizations', function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->string('name')->unique();
-            $table->timestamps();
-
-            $table->softDeletes();
-        });
+        Schema::dropIfExists('role_users');
     }
 
     /**
@@ -25,6 +19,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('organizations');
+        Schema::create('role_users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignUlid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUlid('role_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 };

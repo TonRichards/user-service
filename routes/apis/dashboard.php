@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Dashboard\RoleController;
 use App\Http\Controllers\Api\Dashboard\UserController;
 use App\Http\Controllers\Api\Dashboard\PermissionController;
+use App\Http\Controllers\Api\Dashboard\OrganizationController;
 
 Route::controller(RoleController::class)->prefix('roles')->group(function () {
     Route::post('/', 'store');
@@ -22,6 +23,14 @@ Route::controller(PermissionController::class)->prefix('permissions')->group(fun
 });
 
 Route::controller(UserController::class)->prefix('users')->group(function () {
+    Route::post('/', 'store');
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+Route::controller(OrganizationController::class)->prefix('organizations')->group(function () {
     Route::post('/', 'store');
     Route::get('/', 'index');
     Route::get('/{id}', 'show');

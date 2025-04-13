@@ -38,6 +38,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_users');
     }
 
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'user_organizations')
+            ->withPivot('role_id')
+            ->withTimestamps();
+    }
+
     public function toSearchableArray()
     {
         return [

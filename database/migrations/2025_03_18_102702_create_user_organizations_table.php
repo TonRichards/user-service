@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignUlid('user_id')->constrained()->onDelete('cascade');
             $table->foreignUlid('organization_id')->constrained()->onDelete('cascade');
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
+            $table->timestamp('joined_at')->nullable();
+            $table->enum('status', ['active', 'invited'])->default('active');
+
+            $table->unique(['user_id', 'organization_id']);
             $table->timestamps();
         });
     }
