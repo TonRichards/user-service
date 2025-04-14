@@ -4,22 +4,18 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
-use App\Services\OrganizationService;
-// use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-// use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
-// use App\Http\Requests\UserLoginRequest;
+use App\Services\OrganizationService;
 use App\Http\Resources\OrganizationResource;
 use App\Http\Resources\OrganizationCollection;
 use App\Http\Requests\OrganizationStoreRequest;
+use App\Http\Requests\OrganizationUpdateRequest;
 
 class OrganizationController extends Controller
 {
-    public function __construct(
-        protected OrganizationService $organizationService
-    ) {}
+    public function __construct(protected OrganizationService $organizationService) {}
 
     public function store(OrganizationStoreRequest $request): JsonResponse
     {
@@ -35,9 +31,7 @@ class OrganizationController extends Controller
             'role_id' => $adminRoleId,
         ]);
 
-        return response()->created([
-            'organization' => new OrganizationResource($organization),
-        ]);
+        return response()->created(new OrganizationResource($organization));
     }
 
     public function index(Request $request): JsonResponse
@@ -47,5 +41,21 @@ class OrganizationController extends Controller
         $organizations = $user->organizations()->get();
 
         return response()->success(new OrganizationCollection($organizations));
+    }
+
+    public function update(OrganizationUpdateRequest $request, $id): JsonResponse
+    {
+        $data = $request->validated();
+
+        $organization = $this->organizationService->update($id, $data);
+
+        return response()->success(new OrganizationResource($organization));
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $this->organizationService->destroy($id);
+
+        return response()->success();
     }
 }
