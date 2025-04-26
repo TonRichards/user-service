@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Role;
 use App\Data\RoleData;
 use Illuminate\Http\Request;
+use Meilisearch\Endpoints\Indexes;
 use App\Actions\SyncRolePermissionAction;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -32,15 +33,17 @@ class RoleService
     public function getRoles(Request $request): LengthAwarePaginator
     {
         $search = $request->get('q', '*');
-        $orderBy = $request->get('order');
+        $orderBy = $request->get('order', 'asc');
         $perPage = $request->get('per_page', 10);
+        $page = (int) $request->get('page', 1);
         $sortBy = $request->get('sort', 'created_at');
+        $applicationId = $request->get('application_id', 1);
 
-        $query = $this->model()
-            ->search($search)
-            ->orderBy($sortBy, $orderBy);
-
-        return $query->paginate($perPage);
+        return $this->model()::search($search, function (Indexes $meilisearch, $query, $options) use ($applicationId, $sortBy, $orderBy) {
+            $options['filter'] = 'application_id = ' . $applicationId;
+            $options['sort'] = [$sortBy . ':' . $orderBy];
+            return $meilisearch->search($query, $options);
+        })->paginate($perPage, 'page', $page);
     }
 
     public function update(string $id, array $data = []): Role

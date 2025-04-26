@@ -18,6 +18,10 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'organizations'  => $this->organizations->map(fn($org) => [ // @phpstan-ignore-line
+                'organization_id' => $org->id,
+                'role'            => $org->pivot->role_id,
+            ]),
         ];
     }
 }

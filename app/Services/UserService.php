@@ -55,4 +55,19 @@ class UserService
         $user->delete();
 
     }
+
+    public function syncOrganization(User $user, array $data): void
+    {
+        if (isset($data['organizations'])) {
+            $syncData = collect($data['organizations'])->mapWithKeys(function ($org) {
+                return [
+                    $org['organization_id'] => [
+                        'role_id' => $org['role']
+                    ]
+                ];
+            })->all();
+
+            $user->organizations()->sync($syncData);
+        }
+    }
 }

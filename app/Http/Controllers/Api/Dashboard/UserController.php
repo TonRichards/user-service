@@ -44,9 +44,7 @@ class UserController extends Controller
 
         $user = $this->userService->update($id, $data);
 
-        if (isset($data['roles'])) {
-            $user->roles()->sync($data['roles']);
-        }
+        $this->userService->syncOrganization($user, $data);
 
         return response()->success(new UserResource($user->fresh()));
     }
