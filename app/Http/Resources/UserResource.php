@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $id
  * @property string $name
  * @property string $email
+ * @property string $current_organization_id
  */
 class UserResource extends JsonResource
 {
@@ -20,9 +21,9 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'current_organization_id' => $this->current_organization_id,
             'organizations'  => $this->organizations->map(fn($org) => [ // @phpstan-ignore-line
-                'organization_id' => $org->id,
-                'role'            => $org->pivot->role_id,
-                'name' => $org->name,
+                'organization_id'   => $org->id,
+                'role'              => $org->pivot->role_id,
+                'name'              => $org->name,
             ]),
         ];
     }

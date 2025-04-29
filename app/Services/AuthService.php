@@ -24,7 +24,7 @@ class AuthService
     public function assignCurrentOrganization(User $user, ?string $organizationId = null): void
     {
         if (!$organizationId) {
-            $organizationId = $user->organizations()->first()?->id;
+            $organizationId = $user->organizations()->first()?->id; // @phpstan-ignore-line
         }
 
         $user->forceFill([
