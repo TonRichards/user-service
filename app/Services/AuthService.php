@@ -20,4 +20,15 @@ class AuthService
 
         return Auth::user();
     }
+
+    public function assignCurrentOrganization(User $user, ?string $organizationId = null): void
+    {
+        if (!$organizationId) {
+            $organizationId = $user->organizations()->first()?->id;
+        }
+
+        $user->forceFill([
+            'current_organization_id' => $organizationId,
+        ])->save();
+    }
 }

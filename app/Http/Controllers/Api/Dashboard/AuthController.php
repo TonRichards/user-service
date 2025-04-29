@@ -55,6 +55,25 @@ class AuthController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        return response()->success(new UserResource($user));
+        $this->authService->assignCurrentOrganization($user, $user->current_organization_id);
+
+        return response()->success(new UserResource($user->fresh()));
+    }
+
+    public function switchOrganization(Request $request): JsonResponse
+    {
+        $user = Auth::guard('api')->user();
+
+        $request->validate([
+            'organization_id' => 'required|exists:organizations,id',
+        ]);
+
+        if (! $user->organizations()->where('organizations.id', $request->organization_id)->exists()) {
+            return response()->unauthorized();
+        }
+
+        $this->authService->assignCurrentOrganization($user, $request->organization_id);
+
+        return response()->success(new UserResource($user->fresh()));
     }
 }
