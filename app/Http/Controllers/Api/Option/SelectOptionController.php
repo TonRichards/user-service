@@ -33,4 +33,11 @@ class SelectOptionController extends Controller
 
         return response()->success(['data' => $data]);
     }
+
+    public function permissions(Request $request): JsonResponse
+    {
+        $data = $this->selectOptionService->getPermissionOptions($request);
+
+        return response()->success(['data' => $data]);
+    }
 }

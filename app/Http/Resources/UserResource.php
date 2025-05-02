@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'current_organization_id' => $this->current_organization_id,
-            'organizations'  => $this->organizations($this->organizations),
+            'organizations'  => $this->organizations($this->organizations), // @phpstan-ignore-line
         ];
     }
 

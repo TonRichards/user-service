@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Permission;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -48,12 +49,24 @@ class SelectOptionService
         $user = $request->user();
         $baseKey = 'roles_application_' . $request->application_id . '_organization_' . $user->current_organization_id;
 
-        return $this->buildResponse('roles', function () use ($request, $user) {
+        return $this->buildResponse($baseKey, function () use ($request, $user) {
             return Role::select('id', 'display_name')
                 ->where('application_id', $request->application_id)
                 ->where('organization_id', $user->current_organization_id)
                 ->when($request->q, fn($q) => $q->where('display_name', 'like', '%' . $request->q . '%'))
                 ->orderBy('display_name')
+                ->get();
+        });
+    }
+
+    public function getPermissionOptions(Request $request)
+    {
+        $user = $request->user();
+        $baseKey = 'permissions_application_' . $request->application_id . '_organization_' . $user->current_organization_id;
+
+        return $this->buildResponse($baseKey, function () {
+            return Permission::select('id', 'name', 'label_en')
+                ->orderBy('name')
                 ->get();
         });
     }

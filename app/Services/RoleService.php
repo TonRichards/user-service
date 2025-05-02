@@ -32,15 +32,18 @@ class RoleService
 
     public function getRoles(Request $request): LengthAwarePaginator
     {
+        $user = $request->user();
+
         $search = $request->get('q', '*');
         $orderBy = $request->get('order', 'asc');
         $perPage = $request->get('per_page', 10);
         $page = (int) $request->get('page', 1);
         $sortBy = $request->get('sort', 'created_at');
         $applicationId = $request->get('application_id', 1);
+        $organizationId = $user->current_organization_id;
 
-        return $this->model()::search($search, function (Indexes $meilisearch, $query, $options) use ($applicationId, $sortBy, $orderBy) {
-            $options['filter'] = 'application_id = ' . $applicationId;
+        return $this->model()::search($search, function (Indexes $meilisearch, $query, $options) use ($organizationId, $applicationId, $sortBy, $orderBy) {
+            $options['filter'] = 'application_id = ' . $applicationId . ' AND organization_id = ' . $organizationId;
             $options['sort'] = [$sortBy . ':' . $orderBy];
             return $meilisearch->search($query, $options);
         })->paginate($perPage, 'page', $page);

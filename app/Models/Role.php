@@ -36,6 +36,7 @@ class Role extends Model
         return [
             'display_name' => $this->display_name,
             'application_id' => $this->application_id,
+            'organization_id' => $this->organization_id,
         ];
     }
 }

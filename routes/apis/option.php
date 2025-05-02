@@ -6,4 +6,5 @@ Route::controller(SelectOptionController::class)->prefix('select/option')->group
     Route::get('/users', 'users');
     Route::get('/organizations', 'organizations');
     Route::get('/roles', 'roles');
+    Route::get('/permissions', 'permissions');
 });
