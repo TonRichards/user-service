@@ -15,7 +15,18 @@ class UserCollection extends ResourceCollection
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'organizations' => $this->organizations($user->organizations),
             ];
         });
+    }
+
+    private function organizations($organizations): array
+    {
+        return $organizations->map(function ($organization) {
+            return [
+                'id' => $organization->id,
+                'name' => $organization->name,
+            ];
+        })->toArray();
     }
 }

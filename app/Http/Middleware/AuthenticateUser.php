@@ -21,6 +21,10 @@ class AuthenticateUser
             return response()->unauthenticated();
         }
 
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
+
         return $next($request);
     }
 }

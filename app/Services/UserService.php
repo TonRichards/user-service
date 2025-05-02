@@ -33,8 +33,15 @@ class UserService
         $search = $request->get('q', '*');
         $perPage = $request->get('per_page', 10);
 
+        $currentOrgId = $request->user()?->current_organization_id;
+
         return $this->model()
             ->search($search)
+            ->query(function ($query) use ($currentOrgId) {
+                $query->whereHas('organizations', function ($q) use ($currentOrgId) {
+                    $q->where('organizations.id', $currentOrgId);
+                });
+            })
             ->orderBy($sortBy, $orderBy)
             ->paginate($perPage);
     }
@@ -53,7 +60,6 @@ class UserService
         $user = $this->getById($id);
 
         $user->delete();
-
     }
 
     public function syncOrganization(User $user, array $data): void
@@ -67,7 +73,7 @@ class UserService
                 ];
             })->all();
 
-            $user->organizations()->sync($syncData);
+            $user->organizations()->syncWithoutDetaching($syncData);
         }
     }
 }

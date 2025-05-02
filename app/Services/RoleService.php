@@ -59,6 +59,23 @@ class RoleService
         return $role;
     }
 
+    public function upsert(array $data = []): Role
+    {
+        $role = $this->model()->updateOrCreate(
+            [
+                'name' => $data['name'],
+                'application_id' => $data['application_id'],
+                'organization_id' => $data['organization_id'],
+            ], RoleData::fromArray($data)
+        );
+
+        SyncRolePermissionAction::execute($role, $data);
+
+        $role->fresh();
+
+        return $role;
+    }
+
     public function delete(string $id): void
     {
         $role = $this->getById($id);

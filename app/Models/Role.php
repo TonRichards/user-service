@@ -17,11 +17,18 @@ class Role extends Model
     protected $fillable = [
         'name',
         'display_name',
+        'application_id',
+        'organization_id',
     ];
 
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class, 'permission_roles');
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function toSearchableArray()

@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\Application;
 use App\Models\Organization;
+use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
@@ -16,6 +17,8 @@ class RoleSeeder extends Seeder
         ], [
             'name' => 'superadmin',
             'display_name' => 'Superadmin',
+            'application_id' => Application::where('name', 'user-management')->first()->id,
+            'organization_id' => Organization::where('name', 'Ton Company')->first()->id,
         ]);
 
         $role->permissions()->sync(Permission::all()->pluck('id'));

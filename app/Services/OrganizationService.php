@@ -20,6 +20,11 @@ class OrganizationService
         ]);
     }
 
+    public function store(array $data): Organization
+    {
+        return Organization::create(['name' => $data['name']]);
+    }
+
     public function update(string $id, array $data): Organization
     {
         $organization = $this->getById($id);
@@ -34,6 +39,8 @@ class OrganizationService
         $organization = $this->getById($id);
 
         $organization->users()->detach();
+
+        $organization->roles()->delete();
 
         $organization->delete();
     }

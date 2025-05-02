@@ -25,6 +25,10 @@ $app = Application::configure(basePath: dirname(__DIR__))
         $router->middleware(['auth:api'])->prefix('api')->group(function () {
             require __DIR__.'/../routes/apis/dashboard.php';
         });
+
+        $router->middleware(['auth:api'])->prefix('api')->group(function () {
+            require __DIR__.'/../routes/apis/option.php';
+        });
     })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([

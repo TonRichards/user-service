@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Permission;
+use App\Models\Application;
+use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
 {
@@ -122,6 +123,8 @@ class PermissionSeeder extends Seeder
             ],
         ];
 
+        $applicationId = Application::where('name', 'user-management')->first()->id;
+
         foreach ($permissions as $perm) {
             Permission::updateOrCreate(
                 ['name' => $perm['name']],
@@ -130,6 +133,7 @@ class PermissionSeeder extends Seeder
                     'label_th' => $perm['label_th'],
                     'description_en' => $perm['description_en'],
                     'description_th' => $perm['description_th'],
+                    'application_id' => $applicationId,
                 ]
             );
         }

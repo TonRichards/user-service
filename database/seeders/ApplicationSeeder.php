@@ -15,8 +15,8 @@ class ApplicationSeeder extends Seeder
     {
         $applications = [
             [
-                'name' => 'project-management-service',
-                'display_name' => 'Project Management Service',
+                'name' => 'user-management',
+                'display_name' => 'User Management',
             ],
             [
                 'name' => 'ecommerce-erp',

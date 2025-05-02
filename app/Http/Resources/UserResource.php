@@ -20,11 +20,18 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'current_organization_id' => $this->current_organization_id,
-            'organizations'  => $this->organizations->map(fn($org) => [ // @phpstan-ignore-line
-                'organization_id'   => $org->id,
-                'role'              => $org->pivot->role_id,
-                'name'              => $org->name,
-            ]),
+            'organizations'  => $this->organizations($this->organizations),
         ];
+    }
+
+    private function organizations($organizations): array
+    {
+        return $organizations->map(function ($organization) {
+            return [
+                'organization_id' => $organization->id,
+                'name' => $organization->name,
+                'role' => $organization->pivot->role_id,
+            ];
+        })->toArray();
     }
 }

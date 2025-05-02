@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Services\RoleService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Services\OrganizationService;
 use App\Http\Resources\OrganizationResource;
 use App\Http\Resources\OrganizationCollection;
@@ -15,7 +15,10 @@ use App\Http\Requests\OrganizationUpdateRequest;
 
 class OrganizationController extends Controller
 {
-    public function __construct(protected OrganizationService $organizationService) {}
+    public function __construct(
+        protected RoleService $roleService,
+        protected OrganizationService $organizationService,
+    ) {}
 
     public function store(OrganizationStoreRequest $request): JsonResponse
     {
@@ -23,12 +26,18 @@ class OrganizationController extends Controller
 
         $organization = $this->organizationService->upsert($data);
 
-        $user = Auth::guard('api')->user();
+        $user = $request->user();
 
-        $adminRoleId = Role::where('name', 'admin')->value('id');
+        $ownerRole = $this->roleService->upsert([
+            'name' => 'owner',
+            'display_name' => 'Owner',
+            'organization_id' => $organization->id,
+            'application_id' => $data['application_id'],
+        ]);
 
         $user->organizations()->attach($organization->id, [
-            'role_id' => $adminRoleId,
+            'role_id' => $ownerRole->id,
+            'application_id' => $data['application_id'],
         ]);
 
         return response()->created(new OrganizationResource($organization));
@@ -36,7 +45,7 @@ class OrganizationController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $user = Auth::guard('api')->user();
+        $user = $request->user();
 
         $organizations = $user->organizations()->get();
 

@@ -21,6 +21,8 @@ class UserController extends Controller
 
         $user = $this->userService->store($data);
 
+        $this->userService->syncOrganization($user, $data);
+
         return response()->created(new UserResource($user));
     }
 

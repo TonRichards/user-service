@@ -8,7 +8,6 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserRegisterResource;
@@ -53,7 +52,7 @@ class AuthController extends Controller
 
     public function getCurrentUser(Request $request): JsonResponse
     {
-        $user = Auth::guard('api')->user();
+        $user = $request->user();
 
         $this->authService->assignCurrentOrganization($user, $user->current_organization_id);
 
@@ -62,7 +61,7 @@ class AuthController extends Controller
 
     public function switchOrganization(Request $request): JsonResponse
     {
-        $user = Auth::guard('api')->user();
+        $user = $request->user();
 
         $request->validate([
             'organization_id' => 'required|exists:organizations,id',
