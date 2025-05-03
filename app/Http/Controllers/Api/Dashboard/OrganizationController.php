@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Services\RoleService;
 use Illuminate\Http\JsonResponse;
@@ -28,11 +29,14 @@ class OrganizationController extends Controller
 
         $user = $request->user();
 
+        $permissionNames = Permission::where('application_id', $data['application_id'])->pluck('name');
+
         $ownerRole = $this->roleService->upsert([
             'name' => 'owner',
             'display_name' => 'Owner',
             'organization_id' => $organization->id,
             'application_id' => $data['application_id'],
+            'permission_names' => $permissionNames,
         ]);
 
         $user->organizations()->attach($organization->id, [
