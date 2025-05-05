@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Dashboard;
+namespace App\Http\Controllers\Api\Clients;
 
 use Illuminate\Http\Request;
 use App\Services\RoleService;

@@ -18,12 +18,12 @@ $app = Application::configure(basePath: dirname(__DIR__))
             return response()->json(['status' => 'OK']);
         });
 
-        $router->middleware(['api'])->prefix('api')->group(function () {
+        $router->middleware(['api'])->prefix('api/clients')->group(function () {
             require __DIR__.'/../routes/apis/auth.php';
         });
 
-        $router->middleware(['auth:api'])->prefix('api')->group(function () {
-            require __DIR__.'/../routes/apis/dashboard.php';
+        $router->middleware(['auth:api'])->prefix('api/clients')->group(function () {
+            require __DIR__.'/../routes/apis/client.php';
         });
 
         $router->middleware(['auth:api'])->prefix('api')->group(function () {

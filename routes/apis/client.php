@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Dashboard\RoleController;
-use App\Http\Controllers\Api\Dashboard\UserController;
-use App\Http\Controllers\Api\Dashboard\PermissionController;
-use App\Http\Controllers\Api\Dashboard\OrganizationController;
+use App\Http\Controllers\Api\Clients\RoleController;
+use App\Http\Controllers\Api\Clients\UserController;
+use App\Http\Controllers\Api\Clients\PermissionController;
+use App\Http\Controllers\Api\Clients\OrganizationController;
 
 Route::controller(RoleController::class)->prefix('roles')->group(function () {
     Route::post('/', 'store');
