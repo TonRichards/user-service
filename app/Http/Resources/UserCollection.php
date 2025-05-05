@@ -15,18 +15,11 @@ class UserCollection extends ResourceCollection
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'organizations' => $this->organizations($user->organizations),
+                'current_role' => optional($user->current_role, fn($role) => [
+                    'id' => $role->id,
+                    'display_name' => $role->display_name,
+                ]),
             ];
         });
-    }
-
-    private function organizations($organizations): array
-    {
-        return $organizations->map(function ($organization) {
-            return [
-                'id' => $organization->id,
-                'name' => $organization->name,
-            ];
-        })->toArray();
     }
 }

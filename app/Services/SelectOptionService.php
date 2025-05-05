@@ -47,12 +47,12 @@ class SelectOptionService
     public function getRoleOptions(Request $request)
     {
         $user = $request->user();
-        $baseKey = 'roles_application_' . $request->application_id . '_organization_' . $user->current_organization_id;
+        $baseKey = 'roles_application_' . $request->application_id . '_user_' . $user->id;
 
         return $this->buildResponse($baseKey, function () use ($request, $user) {
-            return Role::select('id', 'display_name')
+            return Role::select('id', 'display_name', 'organization_id')
                 ->where('application_id', $request->application_id)
-                ->where('organization_id', $user->current_organization_id)
+                ->whereIn('organization_id', $user->organizations()->pluck('organization_id'))
                 ->when($request->q, fn($q) => $q->where('display_name', 'like', '%' . $request->q . '%'))
                 ->orderBy('display_name')
                 ->get();

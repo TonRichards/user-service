@@ -10,6 +10,7 @@ class UserData extends Data
     public function __construct(
         public string $name,
         public string $email,
+        public string $applicatino_id,
         public ?string $password = null,
     ) {}
 
@@ -18,6 +19,7 @@ class UserData extends Data
         return [
             'name' => $data['name'],
             'email' => $data['email'],
+            'application_id' => $data['application_id'],
             'password' => isset($data['password']) ? bcrypt($data['password']) : null,
         ];
     }

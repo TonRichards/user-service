@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $users = $this->userService->getUsers($request);
+        $users = $this->userService->getUsersWithCurrentRoles($request);
 
         return response()->withPaginated($users, new UserCollection($users));
     }

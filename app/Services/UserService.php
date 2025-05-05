@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Data\UserData;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class UserService
         return UpsertUserAction::execute($data);
     }
 
-    public function getUsers(Request $request): LengthAwarePaginator
+    public function getUsersWithCurrentRoles(Request $request): LengthAwarePaginator
     {
         $sortBy = $request->get('sort', 'created_at');
         $orderBy = $request->get('order', 'asc');
@@ -35,8 +36,7 @@ class UserService
 
         $currentOrgId = $request->user()?->current_organization_id;
 
-        return $this->model()
-            ->search($search)
+        $paginator = User::search($search)
             ->query(function ($query) use ($currentOrgId) {
                 $query->whereHas('organizations', function ($q) use ($currentOrgId) {
                     $q->where('organizations.id', $currentOrgId);
@@ -44,6 +44,27 @@ class UserService
             })
             ->orderBy($sortBy, $orderBy)
             ->paginate($perPage);
+
+        $paginator->getCollection()->load([ // @phpstan-ignore-line
+            'organizations' => fn ($q) => $q->withPivot('role_id'),
+        ]);
+
+        $roleIds = collect($paginator->items())
+            ->map(function ($user) use ($currentOrgId) {
+                return $user->organizations->firstWhere('id', $currentOrgId)?->pivot?->role_id;
+            })
+            ->filter()
+            ->unique();
+
+        $roles = Role::whereIn('id', $roleIds)->get()->keyBy('id');
+
+        foreach ($paginator->items() as $user) {
+            $org = $user->organizations->firstWhere('id', $currentOrgId);
+            $roleId = $org?->pivot?->role_id;
+            $user->setRelation('current_role', $roles[$roleId] ?? null);
+        }
+
+        return $paginator;
     }
 
     public function update(string $id, array $data = []): User
@@ -64,11 +85,14 @@ class UserService
 
     public function syncOrganization(User $user, array $data): void
     {
+        $applicationId = $data['application_id'];
+
         if (isset($data['organizations'])) {
-            $syncData = collect($data['organizations'])->mapWithKeys(function ($org) {
+            $syncData = collect($data['organizations'])->mapWithKeys(function ($org) use ($applicationId) {
                 return [
                     $org['organization_id'] => [
-                        'role_id' => $org['role']
+                        'role_id' => $org['role'],
+                        'application_id' => $applicationId,
                     ]
                 ];
             })->all();

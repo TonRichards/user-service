@@ -17,6 +17,7 @@ class UserStoreRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'password' => 'nullable|string|min:6|confirmed',
+            'application_id' => 'required|string',
             'organizations' => 'nullable|array',
             'organizations.*.organization_id' => 'required|exists:organizations,id',
             'organizations.*.role'            => 'required|exists:roles,id',
