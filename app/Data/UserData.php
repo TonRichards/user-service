@@ -10,7 +10,7 @@ class UserData extends Data
     public function __construct(
         public string $name,
         public string $email,
-        public string $applicatino_id,
+        public string $application_id,
         public ?string $password = null,
     ) {}
 
