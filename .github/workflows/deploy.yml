@@ -30,6 +30,10 @@ jobs:
           script: |
             cd /home/ubuntu/erawan/user-service
             git pull origin qa
-            composer install --no-dev
-            php artisan migrate --force
-            php artisan config:cache
+            docker exec -i user_service bash -c "
+              cd /var/www
+              git config --global --add safe.directory /var/www
+              composer install --no-dev --optimize-autoloader
+              php artisan migrate --force
+              php artisan config:cache
+            "
