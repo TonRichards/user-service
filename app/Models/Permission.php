@@ -19,6 +19,7 @@ class Permission extends Model
         'label_th',
         'description_en',
         'description_th',
+        'application_id',
     ];
 
     public function roles(): BelongsToMany
