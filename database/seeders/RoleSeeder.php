@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
             'name' => 'superadmin',
             'display_name' => 'Superadmin',
             'application_id' => Application::where('name', 'user-management')->first()->id,
-            'organization_id' => Organization::where('name', 'Ton Company')->first()->id,
+            'organization_id' => Organization::where('name', 'Eraton')->first()->id,
         ]);
 
         $role->permissions()->sync(Permission::all()->pluck('id'));

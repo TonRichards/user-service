@@ -13,6 +13,6 @@ class OrganizationSeeder extends Seeder
      */
     public function run(): void
     {
-        Organization::updateOrCreate(['name' => 'Ton Company']);
+        Organization::updateOrCreate(['name' => 'Eraton']);
     }
 }

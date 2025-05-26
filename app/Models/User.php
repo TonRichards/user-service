@@ -44,7 +44,7 @@ class User extends Authenticatable
     public function organizations(): BelongsToMany
     {
         return $this->belongsToMany(Organization::class, 'user_organizations')
-            ->withPivot('role_id')
+            ->withPivot('role_id', 'application_id')
             ->withTimestamps();
     }
 
