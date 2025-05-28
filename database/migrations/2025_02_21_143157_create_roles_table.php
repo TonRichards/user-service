@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('application_id')->constrained()->onDelete('cascade');
-            $table->string('name')->unique();
-            $table->text('description')->nullable();
+            $table->string('name');
+            $table->string('display_name')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->unique(['application_id', 'name']);
+            $table->unique(['name']);
         });
     }
 

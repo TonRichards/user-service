@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applications', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->string('display_name')->unique();
-            $table->text('description')->nullable();
-            $table->timestamps();
+        Schema::table('user_organizations', function (Blueprint $table) {
+            $table->foreignUlid('application_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -25,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('applications');
+        Schema::table('user_organizations', function (Blueprint $table) {
+            $table->dropForeign(['application_id']);
+            $table->dropColumn('application_id');
+        });
     }
 };

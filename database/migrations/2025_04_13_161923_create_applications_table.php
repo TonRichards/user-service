@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('application_accesses', function (Blueprint $table) {
-            $table->id();
-            $table->char('user_id', 26);
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('application_id')->constrained()->onDelete('cascade');
+        Schema::create('applications', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->string('name')->unique();
+            $table->string('display_name');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('application_accesses');
+        Schema::dropIfExists('applications');
     }
 };

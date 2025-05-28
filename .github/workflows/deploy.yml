@@ -1,0 +1,39 @@
+name: Deploy User Service
+
+on:
+  push:
+    branches:
+      - qa
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/erawan/user-service
+            git pull origin qa
+            docker exec -i user_service bash -c "
+              cd /var/www
+              git config --global --add safe.directory /var/www
+              composer install --no-dev --optimize-autoloader
+              php artisan migrate --force
+              php artisan config:cache
+            "

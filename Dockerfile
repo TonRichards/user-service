@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     procps \
     net-tools \
-    supervisor \ 
+    supervisor \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
