@@ -39,7 +39,7 @@ class RoleService
         $perPage = $request->get('per_page', 10);
         $page = (int) $request->get('page', 1);
         $sortBy = $request->get('sort', 'created_at');
-        $applicationId = $request->get('application_id', 1);
+        $applicationId = $request->get('application_id');
         $organizationId = $user->current_organization_id;
 
         return $this->model()::search($search, function (Indexes $meilisearch, $query, $options) use ($organizationId, $applicationId, $sortBy, $orderBy) {
