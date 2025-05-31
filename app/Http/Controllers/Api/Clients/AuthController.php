@@ -75,4 +75,13 @@ class AuthController extends Controller
 
         return response()->success(new UserResource($user->fresh()));
     }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->token()->revoke();
+
+        return response()->json([
+            'message' => 'Logout successful'
+        ]);
+    }
 }
