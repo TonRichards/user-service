@@ -24,6 +24,8 @@ class RoleController extends Controller
 
     public function index(Request $request): JsonResponse
     {
+        $request->validate(['application_id' => 'required']);
+
         $roles = $this->roleService->getRoles($request);
 
         return response()->withPaginated($roles, new RoleCollection($roles));
