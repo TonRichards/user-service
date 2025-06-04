@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\Option\SelectOptionController;
+use App\Http\Controllers\Api\SelectOptionController;
 
-Route::controller(SelectOptionController::class)->prefix('select/option')->group(function () {
+Route::controller(SelectOptionController::class)->prefix('option')->group(function () {
     Route::get('/users', 'users');
     Route::get('/organizations', 'organizations');
     Route::get('/roles', 'roles');
