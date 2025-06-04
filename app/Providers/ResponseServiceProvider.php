@@ -45,7 +45,7 @@ class ResponseServiceProvider extends ServiceProvider
         Response::macro('unauthorized', function () {
             return Response::json([
                 'success' => false,
-                'message' => 'Unauthorized to this resources',
+                'message' => 'Unauthorized to this resource.',
             ], 403);
         });
 

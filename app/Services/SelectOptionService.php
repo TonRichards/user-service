@@ -52,7 +52,7 @@ class SelectOptionService
         return $this->buildResponse($baseKey, function () use ($request, $user) {
             return Role::select('id', 'display_name', 'organization_id')
                 ->where('application_id', $request->application_id)
-                ->whereIn('organization_id', $user->organizations()->pluck('organization_id'))
+                ->whereIn('organization_id', $user->organizations()->pluck('organizations.id'))
                 ->when($request->q, fn($q) => $q->where('display_name', 'like', '%' . $request->q . '%'))
                 ->orderBy('display_name')
                 ->get();

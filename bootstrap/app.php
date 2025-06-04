@@ -18,16 +18,28 @@ $app = Application::configure(basePath: dirname(__DIR__))
             return response()->json(['status' => 'OK']);
         });
 
-        $router->middleware(['api'])->prefix('api/clients')->group(function () {
+        $router->middleware(['api'])->prefix('api/auth')->group(function () {
             require __DIR__.'/../routes/apis/auth.php';
         });
 
-        $router->middleware(['auth:api'])->prefix('api/clients')->group(function () {
-            require __DIR__.'/../routes/apis/client.php';
+        $router->middleware(['auth:api'])->prefix('api/users')->group(function () {
+            require __DIR__.'/../routes/apis/user.php';
         });
 
-        $router->middleware(['auth:api'])->prefix('api')->group(function () {
-            require __DIR__.'/../routes/apis/option.php';
+        $router->middleware(['auth:api'])->prefix('api/roles')->group(function () {
+            require __DIR__.'/../routes/apis/role.php';
+        });
+
+        $router->middleware(['auth:api'])->prefix('api/permissions')->group(function () {
+            require __DIR__.'/../routes/apis/permission.php';
+        });
+
+        $router->middleware(['auth:api'])->prefix('api/organizations')->group(function () {
+            require __DIR__.'/../routes/apis/organization.php';
+        });
+
+        $router->middleware(['auth:api'])->prefix('api/select')->group(function () {
+            require __DIR__.'/../routes/apis/select.php';
         });
     })
     ->withMiddleware(function (Middleware $middleware) {

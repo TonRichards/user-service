@@ -6,9 +6,9 @@ use App\Models\Organization;
 
 class OrganizationService
 {
-    public function getById(string $id): Organization
+    public function getById(string $id): ?Organization
     {
-        return Organization::where('id', $id)->first();
+        return Organization::findOrFail($id);
     }
 
     public function upsert(array $data): Organization
