@@ -7,9 +7,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "firebase/php-jwt": "^6.11",
         "http-interop/http-factory-guzzle": "^1.2",
         "laravel/framework": "^11.31",
-        "laravel/passport": "^12.0",
         "laravel/scout": "^10.13",
         "laravel/tinker": "^2.9",
         "meilisearch/meilisearch-php": "^1.13",
@@ -58,7 +58,7 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ],
-        "phpstan": "vendor/bin/phpstan analyse --memory-limit=512M",
+        "analyse": "php vendor/phpstan/phpstan/phpstan analyse --memory-limit=1G",
         "test": "php artisan test"
     },
     "extra": {

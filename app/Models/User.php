@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Laravel\Scout\Searchable;
-use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasUlids, HasApiTokens, Searchable;
+    use HasFactory, Notifiable, HasUlids, Searchable;
 
     protected $fillable = [
         'name',
