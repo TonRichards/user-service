@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use Firebase\JWT\JWT;
+use App\Services\JwtService;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Services\RefreshTokenService;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserRegisterResource;
@@ -17,6 +20,7 @@ class AuthController extends Controller
     public function __construct(
         protected AuthService $authService,
         protected UserService $userService,
+        protected RefreshTokenService $refreshTokenService,
     ) {}
 
     public function register(UserRegisterRequest $request): JsonResponse
@@ -44,9 +48,48 @@ class AuthController extends Controller
             ]);
         }
 
+        $token = app(JwtService::class)->generate([
+            'sub' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'current_organization_id' => $user->current_organization_id,
+        ]);
+
+        $refreshToken = $this->refreshTokenService->create($user);
+
         return response()->success([
-            'user' => new UserRegisterResource($user),
-            'access_token' => $user->createToken('auth_service_token')->accessToken,
+            'user' => new UserResource($user),
+            'access_token' => $token,
+            'refresh_token' => $refreshToken,
+            'token_type' => 'Bearer',
+            'expires_in' => 15 * 60,
+        ]);
+    }
+
+    public function refresh(Request $request)
+    {
+        $refreshToken = $request->input('refresh_token');
+
+        if (!$refreshToken) {
+            return response()->json(['message' => 'Refresh token required'], 400);
+        }
+
+        $user = $this->refreshTokenService->validate($refreshToken);
+
+        if (!$user) {
+            return response()->json(['message' => 'Invalid refresh token'], 401);
+        }
+
+        $jwt = JWT::encode([
+            'sub' => $user->id,
+            'email' => $user->email,
+            'exp' => now()->addMinutes(15)->timestamp
+        ], config('jwt.secret'), 'HS256');
+
+        return response()->json([
+            'access_token' => $jwt,
+            'token_type' => 'Bearer',
+            'expires_in' => 15 * 60,
         ]);
     }
 
@@ -78,7 +121,13 @@ class AuthController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->token()->revoke();
+        $refreshToken = $request->input('refresh_token');
+
+        if (!$refreshToken) {
+            return response()->json(['message' => 'Missing refresh token'], 400);
+        }
+
+        $this->refreshTokenService->revoke($refreshToken);
 
         return response()->json([
             'message' => 'Logout successful'
