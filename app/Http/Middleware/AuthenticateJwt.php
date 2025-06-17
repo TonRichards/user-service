@@ -15,12 +15,16 @@ class AuthenticateJwt
     {
         $token = $request->bearerToken();
 
+        $publicKey = file_get_contents(base_path(env('JWT_PUBLIC_KEY_PATH')));
+
+        $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
+
         if (!$token) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         try {
-            $payload = JWT::decode($token, new Key(config('jwt.secret'), 'HS256'));
+            $payload = JWT::decode($token, new Key($publicKey, 'RS256'));
 
             $user = User::find($payload->sub);
 
@@ -35,6 +39,7 @@ class AuthenticateJwt
             return $next($request);
 
         } catch (\Exception $e) {
+            \Log::error('JWT decode failed: ' . $e->getMessage());
             return response()->json(['message' => 'Invalid token'], 401);
         }
     }

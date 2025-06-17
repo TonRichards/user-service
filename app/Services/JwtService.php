@@ -3,28 +3,45 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Config;
 
 class JwtService
 {
-    public function generate(array $payload): string
+    public function generate(User $user)
     {
-        $now = Carbon::now()->timestamp;
-        $exp = $now + config('jwt.ttl', 3600);
+        $privateKey = file_get_contents(base_path(env('JWT_PRIVATE_KEY_PATH')));
 
-        $data = array_merge([
-            'iss' => config('jwt.issuer', 'user_service'),
-            'iat' => $now,
-            'exp' => $exp,
-        ], $payload);
+        $payload = [
+            'sub' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'current_organization_id' => $user->current_organization_id,
+            'organizations'  => $this->organizations($user->organizations), // @phpstan-ignore-line
+            'exp' => time() + env('JWT_EXP', 3600),
+            'iss' => 'user-service',
+            'aud' => 'order-service',
+        ];
 
-        return JWT::encode($data, config('jwt.secret'), 'HS256');
+        return JWT::encode($payload, $privateKey, env('JWT_ALGO', 'RS256'));
     }
 
     public function decode(string $token): object
     {
-        return JWT::decode($token, new Key(config('jwt.secret'), 'HS256'));
+        return JWT::decode($token, new Key($publicKey, 'RS256'));
+    }
+
+    private function organizations($organizations): array
+    {
+        return $organizations->map(function ($organization) {
+            return [
+                'organization_id' => $organization->id,
+                'name' => $organization->name,
+                'role' => $organization->pivot->role_id,
+            ];
+        })->toArray();
     }
 }
