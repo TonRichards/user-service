@@ -48,12 +48,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = app(JwtService::class)->generate([
-            'sub' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'current_organization_id' => $user->current_organization_id,
-        ]);
+        $token = app(JwtService::class)->generate($user);
 
         $refreshToken = $this->refreshTokenService->create($user);
 
