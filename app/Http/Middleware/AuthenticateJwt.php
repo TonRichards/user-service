@@ -7,6 +7,7 @@ use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
+use App\Services\JwtService;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticateJwt
@@ -15,18 +16,16 @@ class AuthenticateJwt
     {
         $token = $request->bearerToken();
 
-        $publicKey = file_get_contents(base_path(env('JWT_PUBLIC_KEY_PATH')));
-
-        $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
-
         if (!$token) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         try {
-            $payload = JWT::decode($token, new Key($publicKey, 'RS256'));
+            $jwtService = app(JwtService::class);
 
-            $user = User::find($payload->sub);
+            $decode = $jwtService->decode($token);
+
+            $user = User::find($decode->sub);
 
             if (!$user) {
                 return response()->json(['message' => 'User not found'], 404);

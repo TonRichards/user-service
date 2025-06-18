@@ -10,7 +10,6 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Services\RefreshTokenService;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserRegisterResource;
@@ -18,9 +17,9 @@ use App\Http\Resources\UserRegisterResource;
 class AuthController extends Controller
 {
     public function __construct(
+        protected JwtService $jwtService,
         protected AuthService $authService,
         protected UserService $userService,
-        protected RefreshTokenService $refreshTokenService,
     ) {}
 
     public function register(UserRegisterRequest $request): JsonResponse
@@ -48,9 +47,9 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = app(JwtService::class)->generate($user);
+        $token = $this->jwtService->generate($user);
 
-        $refreshToken = $this->refreshTokenService->create($user);
+        $refreshToken = $this->jwtService->refresh($user);
 
         return response()->success([
             'user' => new UserResource($user),
@@ -69,20 +68,20 @@ class AuthController extends Controller
             return response()->json(['message' => 'Refresh token required'], 400);
         }
 
-        $user = $this->refreshTokenService->validate($refreshToken);
+        $user = $this->jwtService->validate($refreshToken);
 
         if (!$user) {
             return response()->json(['message' => 'Invalid refresh token'], 401);
         }
 
-        $jwt = JWT::encode([
-            'sub' => $user->id,
-            'email' => $user->email,
-            'exp' => now()->addMinutes(15)->timestamp
-        ], config('jwt.secret'), 'HS256');
+        $token = $this->jwtService->generate($user);
+
+        $refreshToken = $this->jwtService->refresh($user);
 
         return response()->json([
-            'access_token' => $jwt,
+            'user' => new UserResource($user),
+            'access_token' => $token,
+            'refresh_token' => $refreshToken,
             'token_type' => 'Bearer',
             'expires_in' => 15 * 60,
         ]);
@@ -122,7 +121,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Missing refresh token'], 400);
         }
 
-        $this->refreshTokenService->revoke($refreshToken);
+        $this->jwtService->revoke($refreshToken);
 
         return response()->json([
             'message' => 'Logout successful'

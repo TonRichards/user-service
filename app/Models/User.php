@@ -27,6 +27,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $with = ['currentOrganization'];
+
     protected function casts(): array
     {
         return [
