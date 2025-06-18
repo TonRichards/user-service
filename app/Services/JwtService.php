@@ -6,42 +6,65 @@ use Carbon\Carbon;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Data\JwtData;
+use Illuminate\Support\Str;
+use App\Models\RefreshToken;
 use Illuminate\Support\Facades\Config;
 
 class JwtService
 {
+    public function __construct(protected JwtData $jwtData) {}
+
     public function generate(User $user)
     {
-        $privateKey = file_get_contents(base_path(env('JWT_PRIVATE_KEY_PATH')));
+        $payload = $this->jwtData->prepare($user);
 
-        $payload = [
-            'sub' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-            'current_organization_id' => $user->current_organization_id,
-            'organizations'  => $this->organizations($user->organizations), // @phpstan-ignore-line
-            'exp' => time() + env('JWT_EXP', 3600),
-            'iss' => 'user-service',
-            'aud' => 'order-service',
-        ];
-
-        return JWT::encode($payload, $privateKey, env('JWT_ALGO', 'RS256'));
+        return $this->encode($payload);
     }
 
-    public function decode(string $token): object
+    public function refresh(User $user)
     {
-        return JWT::decode($token, new Key($publicKey, 'RS256'));
+        $refreshToken = Str::random(64);
+
+        RefreshToken::create([
+            'user_id' => $user->id,
+            'token' => hash('sha256', $refreshToken),
+            'expires_at' => now()->addDays(7),
+        ]);
+
+        return $refreshToken;
     }
 
-    private function organizations($organizations): array
+    public function validate(string $plainToken): ?User
     {
-        return $organizations->map(function ($organization) {
-            return [
-                'organization_id' => $organization->id,
-                'name' => $organization->name,
-                'role' => $organization->pivot->role_id,
-            ];
-        })->toArray();
+        $hashedToken = hash('sha256', $plainToken);
+
+        $refreshToken = RefreshToken::where('token', $hashedToken)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        $user = User::find($refreshToken->user_id) ?? null;
+
+        return $user;
+    }
+
+    public function encode(array $payload): string
+    {
+        return JWT::encode($payload, config('jwt.private_key'), config('jwt.algorithm'));
+    }
+
+    public function decode($token)
+    {
+        return JWT::decode($token, new Key(config('jwt.public_key'), config('jwt.algorithm')));
+    }
+
+    public function revoke(string $plainToken): void
+    {
+        RefreshToken::where('token', hash('sha256', $plainToken))->delete();
+    }
+
+    public function revokeAll(User $user): void
+    {
+        RefreshToken::where('user_id', $user->id)->delete();
     }
 }

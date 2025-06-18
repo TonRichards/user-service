@@ -15,18 +15,8 @@ class RoleCollection extends ResourceCollection
                 'id' => $role->id,
                 'name' => $role->name,
                 'display_name' => $role->display_name,
-                'permissions' => $this->permissions($role->permissions),
+                'permissions' => PermissionResource::collection($role->permissions), // @phpstan-ignore-line
             ];
         });
-    }
-
-    private function permissions($permissions): array
-    {
-        return $permissions->map(function ($permission) {
-            return [
-                'name' => $permission->name,
-                'label_en' => $permission->label_en,
-            ];
-        })->toArray();
     }
 }
