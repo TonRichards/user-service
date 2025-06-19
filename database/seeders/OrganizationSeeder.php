@@ -13,6 +13,6 @@ class OrganizationSeeder extends Seeder
      */
     public function run(): void
     {
-        Organization::updateOrCreate(['name' => 'Eraton']);
+        Organization::updateOrCreate(['name' => config('app.default_organization_name')]);
     }
 }

@@ -125,4 +125,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /**
+     * Application default values
+     */
+    'default_name' => env('DEFAULT_NAME'),
+    'default_email' => env('DEFAULT_EMAIL'),
+    'default_password' => env('DEFAULT_PASSWORD'),
+    'default_organization_name' => env('DEFAULT_ORGANIZATION_NAME'),
 ];

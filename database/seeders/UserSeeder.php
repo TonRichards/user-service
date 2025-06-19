@@ -17,11 +17,11 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $user = User::updateOrCreate([
-            'email' => env('DEFAULT_EMAIL'),
+            'email' => config('app.default_email'),
         ], [
-            'name' => env('DEFAULT_NAME'),
-            'email' => env('DEFAULT_EMAIL'),
-            'password' => bcrypt(env('DEFAULT_PASSWORD')),
+            'name' => config('app.default_name'),
+            'email' => config('app.default_email'),
+            'password' => bcrypt(config('app.default_password')),
         ]);
 
         $applicationId = Application::where('name', 'user-management')->first()->id;
