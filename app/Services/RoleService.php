@@ -42,6 +42,10 @@ class RoleService
         $applicationId = $request->get('application_id');
         $organizationId = $user->current_organization_id;
 
+        if (!$applicationId || !$organizationId) {
+            abort(400, 'Application or Organization is missing');
+        }
+
         return $this->model()::search($search, function (Indexes $meilisearch, $query, $options) use ($organizationId, $applicationId, $sortBy, $orderBy) {
             $options['filter'] = 'application_id = ' . $applicationId . ' AND organization_id = ' . $organizationId;
             $options['sort'] = [$sortBy . ':' . $orderBy];

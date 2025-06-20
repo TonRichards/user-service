@@ -65,7 +65,7 @@ class SelectOptionService
         $baseKey = 'permissions_application_' . $request->application_id . '_organization_' . $user->current_organization_id;
 
         return $this->buildResponse($baseKey, function () {
-            return Permission::select('id', 'name', 'label_en')
+            return Permission::select('id', 'name', 'label_th')
                 ->orderBy('name')
                 ->get();
         });

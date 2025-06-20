@@ -15,7 +15,7 @@ class OrganizationStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'application_id' => 'required|string',
+            'application_id' => 'required|string|exists:applications,id',
         ];
     }
 }
